@@ -30,6 +30,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Integration test class for OutLookMail connector
+ */
 public class OutLookMailConnectorIntegrationTest extends ConnectorIntegrationTestBase {
 	private Map<String, String> esbRequestHeadersMap = new HashMap<String, String>();
 	private Map<String, String> apiRequestHeadersMap = new HashMap<String, String>();
@@ -62,8 +65,7 @@ public class OutLookMailConnectorIntegrationTest extends ConnectorIntegrationTes
 		esbRequestHeadersMap.put("Action", "urn:createFolder");
 
 		RestResponse<JSONObject> esbRestResponse =
-				sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap,
-				                    "createFolder_mandatory.json");
+				sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap, "createFolder_mandatory.json");
 
 		Assert.assertEquals(esbRestResponse.getHttpStatusCode(), 201);
 	}
@@ -77,34 +79,28 @@ public class OutLookMailConnectorIntegrationTest extends ConnectorIntegrationTes
 		esbRequestHeadersMap.put("Action", "urn:createFolder");
 
 		RestResponse<JSONObject> esbRestResponse =
-				sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap,
-				                    "createFolder_negative.json");
-		Assert.assertEquals(esbRestResponse.getBody().getJSONObject("error").getString("code"),
-		                    "ErrorInvalidRequest");
+				sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap, "createFolder_negative.json");
+		Assert.assertEquals(esbRestResponse.getBody().getJSONObject("error").getString("code"), "ErrorInvalidRequest");
 	}
 
 	/**
 	 * Positive test case for getFolder method with mandatory parameters.
 	 */
-	@Test(enabled = true, dependsOnMethods = {
-			"testCreateFolderWithMandatoryParameters" },
+	@Test(enabled = true, dependsOnMethods = { "testCreateFolderWithMandatoryParameters" },
 			description = "outlookmail {getFolder} integration test with mandatory parameters.")
 	public void testGetFolderWithMandatoryParameters() throws IOException, JSONException {
 		esbRequestHeadersMap.put("Action", "urn:getFolder");
 
 		RestResponse<JSONObject> esbRestResponse =
-				sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap,
-				                    "getFolder_mandatory.json");
+				sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap, "getFolder_mandatory.json");
 
 		String apiEndPoint = connectorProperties.getProperty("apiUrl") + "/" +
 		                     connectorProperties.getProperty("apiVersion") + "/me/MailFolders";
-		RestResponse<JSONObject> apiRestResponse =
-				sendJsonRestRequest(apiEndPoint, "GET", apiRequestHeadersMap);
+		RestResponse<JSONObject> apiRestResponse = sendJsonRestRequest(apiEndPoint, "GET", apiRequestHeadersMap);
 
 		Assert.assertEquals(esbRestResponse.getHttpStatusCode(), 200);
 		Assert.assertEquals(apiRestResponse.getHttpStatusCode(), 200);
-		Assert.assertEquals(esbRestResponse.getBody().toString(),
-		                    apiRestResponse.getBody().toString());
+		Assert.assertEquals(esbRestResponse.getBody().toString(), apiRestResponse.getBody().toString());
 	}
 
 	/**
@@ -116,8 +112,7 @@ public class OutLookMailConnectorIntegrationTest extends ConnectorIntegrationTes
 		esbRequestHeadersMap.put("Action", "urn:getFolder");
 
 		RestResponse<JSONObject> esbRestResponse =
-				sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap,
-				                    "getFolder_negative.json");
+				sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap, "getFolder_negative.json");
 
 		Assert.assertEquals(esbRestResponse.getHttpStatusCode(), 401);
 	}
@@ -125,26 +120,22 @@ public class OutLookMailConnectorIntegrationTest extends ConnectorIntegrationTes
 	/**
 	 * Positive test case for getChildFolder method with mandatory parameters.
 	 */
-	@Test(enabled = true, dependsOnMethods = {
-			"testCreateFolderWithMandatoryParameters" },
+	@Test(enabled = true, dependsOnMethods = { "testCreateFolderWithMandatoryParameters" },
 			description = "outlookmail {getChildFolder} integration test with mandatory parameters.")
 	public void testGetChildFolderWithMandatoryParameters() throws IOException, JSONException {
 		esbRequestHeadersMap.put("Action", "urn:getChildFolder");
 
 		RestResponse<JSONObject> esbRestResponse =
-				sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap,
-				                    "getChildFolder_mandatory.json");
+				sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap, "getChildFolder_mandatory.json");
 
 		String apiEndPoint = connectorProperties.getProperty("apiUrl") + "/" +
 		                     connectorProperties.getProperty("apiVersion") + "/me/MailFolders/" +
 		                     connectorProperties.getProperty("folderId") + "/childfolders";
-		RestResponse<JSONObject> apiRestResponse =
-				sendJsonRestRequest(apiEndPoint, "GET", apiRequestHeadersMap);
+		RestResponse<JSONObject> apiRestResponse = sendJsonRestRequest(apiEndPoint, "GET", apiRequestHeadersMap);
 
 		Assert.assertEquals(esbRestResponse.getHttpStatusCode(), 200);
 		Assert.assertEquals(apiRestResponse.getHttpStatusCode(), 200);
-		Assert.assertEquals(esbRestResponse.getBody().toString(),
-		                    apiRestResponse.getBody().toString());
+		Assert.assertEquals(esbRestResponse.getBody().toString(), apiRestResponse.getBody().toString());
 	}
 
 	/**
@@ -156,8 +147,7 @@ public class OutLookMailConnectorIntegrationTest extends ConnectorIntegrationTes
 		esbRequestHeadersMap.put("Action", "urn:getChildFolder");
 
 		RestResponse<JSONObject> esbRestResponse =
-				sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap,
-				                    "getFolder_negative.json");
+				sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap, "getFolder_negative.json");
 
 		Assert.assertEquals(esbRestResponse.getHttpStatusCode(), 401);
 	}
@@ -171,8 +161,7 @@ public class OutLookMailConnectorIntegrationTest extends ConnectorIntegrationTes
 		esbRequestHeadersMap.put("Action", "urn:deleteFolder");
 
 		RestResponse<JSONObject> esbRestResponse =
-				sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap,
-				                    "deleteFolder_mandatory.json");
+				sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap, "deleteFolder_mandatory.json");
 
 		Assert.assertEquals(esbRestResponse.getHttpStatusCode(), 204);
 	}
@@ -180,14 +169,12 @@ public class OutLookMailConnectorIntegrationTest extends ConnectorIntegrationTes
 	/**
 	 * Negative test case for deleteFolder method with mandatory parameters.
 	 */
-	@Test(enabled = true, description = "outlookmail {deleteFolder} integration test with negative " +
-	                                    "case.")
+	@Test(enabled = true, description = "outlookmail {deleteFolder} integration test with negative " + "case.")
 	public void testDeleteFolderWithNegativeCase() throws IOException, JSONException {
 		esbRequestHeadersMap.put("Action", "urn:deleteFolder");
 
 		RestResponse<JSONObject> esbRestResponse =
-				sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap,
-				                    "deleteFolder_negative.json");
+				sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap, "deleteFolder_negative.json");
 
 		Assert.assertEquals(esbRestResponse.getHttpStatusCode(), 401);
 	}
@@ -195,15 +182,13 @@ public class OutLookMailConnectorIntegrationTest extends ConnectorIntegrationTes
 	/**
 	 * Positive test case for moveFolder method with mandatory parameters.
 	 */
-	@Test(enabled = true, dependsOnMethods = {
-			"testCreateFolderWithMandatoryParameters" },
+	@Test(enabled = true, dependsOnMethods = { "testCreateFolderWithMandatoryParameters" },
 			description = "outlookmail {moveFolder} integration test with mandatory parameters.")
 	public void testMoveFolderWithMandatoryParameters() throws IOException, JSONException {
 		esbRequestHeadersMap.put("Action", "urn:moveFolder");
 
 		RestResponse<JSONObject> esbRestResponse =
-				sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap,
-				                    "moveFolder_mandatory.json");
+				sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap, "moveFolder_mandatory.json");
 
 		Assert.assertEquals(esbRestResponse.getHttpStatusCode(), 201);
 	}
@@ -216,8 +201,7 @@ public class OutLookMailConnectorIntegrationTest extends ConnectorIntegrationTes
 		esbRequestHeadersMap.put("Action", "urn:moveFolder");
 
 		RestResponse<JSONObject> esbRestResponse =
-				sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap,
-				                    "moveFolder_negative.json");
+				sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap, "moveFolder_negative.json");
 
 		Assert.assertEquals(esbRestResponse.getHttpStatusCode(), 401);
 	}
@@ -225,28 +209,22 @@ public class OutLookMailConnectorIntegrationTest extends ConnectorIntegrationTes
 	/**
 	 * Positive test case for getAttachmentCollection method with mandatory parameters.
 	 */
-	@Test(enabled = true, dependsOnMethods = {
-			"testCreateAttachmentWithMandatoryParameters" }, description =
-			"outlookmail {getAttachmentCollection} integration test with mandatory " +
-			"parameters.")
-	public void testGetAttachmentCollectionWithMandatoryParameters()
-			throws IOException, JSONException {
+	@Test(enabled = true, dependsOnMethods = { "testCreateAttachmentWithMandatoryParameters" }, description =
+			"outlookmail {getAttachmentCollection} integration test with mandatory " + "parameters.")
+	public void testGetAttachmentCollectionWithMandatoryParameters() throws IOException, JSONException {
 		esbRequestHeadersMap.put("Action", "urn:getAttachmentCollection");
 
 		RestResponse<JSONObject> esbRestResponse =
-				sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap,
-				                    "getAttachmentCollection_mandatory.json");
+				sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap, "getAttachmentCollection_mandatory.json");
 
 		String apiEndPoint = connectorProperties.getProperty("apiUrl") + "/" +
 		                     connectorProperties.getProperty("apiVersion") + "/me/messages/" +
 		                     connectorProperties.getProperty("messageId") + "/attachments";
-		RestResponse<JSONObject> apiRestResponse =
-				sendJsonRestRequest(apiEndPoint, "GET", apiRequestHeadersMap);
+		RestResponse<JSONObject> apiRestResponse = sendJsonRestRequest(apiEndPoint, "GET", apiRequestHeadersMap);
 
 		Assert.assertEquals(esbRestResponse.getHttpStatusCode(), 200);
 		Assert.assertEquals(apiRestResponse.getHttpStatusCode(), 200);
-		Assert.assertEquals(esbRestResponse.getBody().toString(),
-		                    apiRestResponse.getBody().toString());
+		Assert.assertEquals(esbRestResponse.getBody().toString(), apiRestResponse.getBody().toString());
 	}
 
 	/**
@@ -258,8 +236,7 @@ public class OutLookMailConnectorIntegrationTest extends ConnectorIntegrationTes
 		esbRequestHeadersMap.put("Action", "urn:getAttachmentCollection");
 
 		RestResponse<JSONObject> esbRestResponse =
-				sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap,
-				                    "getAttachmentCollection_negative.json");
+				sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap, "getAttachmentCollection_negative.json");
 
 		Assert.assertEquals(esbRestResponse.getHttpStatusCode(), 401);
 	}
@@ -267,27 +244,23 @@ public class OutLookMailConnectorIntegrationTest extends ConnectorIntegrationTes
 	/**
 	 * Positive test case for getAttachment method with mandatory parameters.
 	 */
-	@Test(enabled = true, dependsOnMethods = {
-			"testCreateAttachmentWithMandatoryParameters" },
+	@Test(enabled = true, dependsOnMethods = { "testCreateAttachmentWithMandatoryParameters" },
 			description = "outlookmail {getAttachment} integration test with mandatory parameters.")
 	public void testGetAttachmentMandatoryParameters() throws IOException, JSONException {
 		esbRequestHeadersMap.put("Action", "urn:getAttachment");
 
 		RestResponse<JSONObject> esbRestResponse =
-				sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap,
-				                    "getAttachment_mandatory.json");
+				sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap, "getAttachment_mandatory.json");
 
 		String apiEndPoint = connectorProperties.getProperty("apiUrl") + "/" +
 		                     connectorProperties.getProperty("apiVersion") + "/me/messages/" +
 		                     connectorProperties.getProperty("messageId") + "/attachments/" +
 		                     connectorProperties.getProperty("attachmentId");
-		RestResponse<JSONObject> apiRestResponse =
-				sendJsonRestRequest(apiEndPoint, "GET", apiRequestHeadersMap);
+		RestResponse<JSONObject> apiRestResponse = sendJsonRestRequest(apiEndPoint, "GET", apiRequestHeadersMap);
 
 		Assert.assertEquals(esbRestResponse.getHttpStatusCode(), 200);
 		Assert.assertEquals(apiRestResponse.getHttpStatusCode(), 200);
-		Assert.assertEquals(esbRestResponse.getBody().toString(),
-		                    apiRestResponse.getBody().toString());
+		Assert.assertEquals(esbRestResponse.getBody().toString(), apiRestResponse.getBody().toString());
 	}
 
 	/**
@@ -298,8 +271,7 @@ public class OutLookMailConnectorIntegrationTest extends ConnectorIntegrationTes
 		esbRequestHeadersMap.put("Action", "urn:getAttachment");
 
 		RestResponse<JSONObject> esbRestResponse =
-				sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap,
-				                    "getAttachment_negative.json");
+				sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap, "getAttachment_negative.json");
 
 		Assert.assertEquals(esbRestResponse.getHttpStatusCode(), 401);
 	}
@@ -313,8 +285,7 @@ public class OutLookMailConnectorIntegrationTest extends ConnectorIntegrationTes
 		esbRequestHeadersMap.put("Action", "urn:deleteAttachment");
 
 		RestResponse<JSONObject> esbRestResponse =
-				sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap,
-				                    "deleteAttachment_mandatory.json");
+				sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap, "deleteAttachment_mandatory.json");
 
 		Assert.assertEquals(esbRestResponse.getHttpStatusCode(), 204);
 	}
@@ -328,8 +299,7 @@ public class OutLookMailConnectorIntegrationTest extends ConnectorIntegrationTes
 		esbRequestHeadersMap.put("Action", "urn:deleteAttachment");
 
 		RestResponse<JSONObject> esbRestResponse =
-				sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap,
-				                    "deleteAttachment_negative.json");
+				sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap, "deleteAttachment_negative.json");
 
 		Assert.assertEquals(esbRestResponse.getHttpStatusCode(), 401);
 	}
@@ -343,8 +313,7 @@ public class OutLookMailConnectorIntegrationTest extends ConnectorIntegrationTes
 		esbRequestHeadersMap.put("Action", "urn:createAttachment");
 
 		RestResponse<JSONObject> esbRestResponse =
-				sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap,
-				                    "createAttachment_mandatory.json");
+				sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap, "createAttachment_mandatory.json");
 
 		Assert.assertEquals(esbRestResponse.getHttpStatusCode(), 201);
 	}
@@ -358,8 +327,7 @@ public class OutLookMailConnectorIntegrationTest extends ConnectorIntegrationTes
 		esbRequestHeadersMap.put("Action", "urn:createAttachment");
 
 		RestResponse<JSONObject> esbRestResponse =
-				sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap,
-				                    "createAttachment_negative.json");
+				sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap, "createAttachment_negative.json");
 
 		Assert.assertEquals(esbRestResponse.getHttpStatusCode(), 401);
 	}
@@ -373,19 +341,16 @@ public class OutLookMailConnectorIntegrationTest extends ConnectorIntegrationTes
 		esbRequestHeadersMap.put("Action", "urn:getMessage");
 
 		RestResponse<JSONObject> esbRestResponse =
-				sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap,
-				                    "getMessage_mandatory.json");
+				sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap, "getMessage_mandatory.json");
 
 		String apiEndPoint = connectorProperties.getProperty("apiUrl") + "/" +
 		                     connectorProperties.getProperty("apiVersion") + "/me/messages/" +
 		                     connectorProperties.getProperty("messageId");
-		RestResponse<JSONObject> apiRestResponse =
-				sendJsonRestRequest(apiEndPoint, "GET", apiRequestHeadersMap);
+		RestResponse<JSONObject> apiRestResponse = sendJsonRestRequest(apiEndPoint, "GET", apiRequestHeadersMap);
 
 		Assert.assertEquals(esbRestResponse.getHttpStatusCode(), 200);
 		Assert.assertEquals(apiRestResponse.getHttpStatusCode(), 200);
-		Assert.assertEquals(esbRestResponse.getBody().toString(),
-		                    apiRestResponse.getBody().toString());
+		Assert.assertEquals(esbRestResponse.getBody().toString(), apiRestResponse.getBody().toString());
 	}
 
 	/**
@@ -396,8 +361,7 @@ public class OutLookMailConnectorIntegrationTest extends ConnectorIntegrationTes
 		esbRequestHeadersMap.put("Action", "urn:getMessage");
 
 		RestResponse<JSONObject> esbRestResponse =
-				sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap,
-				                    "getMessage_negative.json");
+				sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap, "getMessage_negative.json");
 
 		Assert.assertEquals(esbRestResponse.getHttpStatusCode(), 401);
 	}
@@ -406,39 +370,32 @@ public class OutLookMailConnectorIntegrationTest extends ConnectorIntegrationTes
 	 * Positive test case for getMessageCollectionFromFolder method with mandatory parameters.
 	 */
 	@Test(enabled = true, description =
-			"outlookmail {getMessageCollectionFromFolder} integration test with mandatory " +
-			"parameters.")
-	public void testGetMessageCollectionFromFolderWithMandatoryParameters()
-			throws IOException, JSONException {
+			"outlookmail {getMessageCollectionFromFolder} integration test with mandatory " + "parameters.")
+	public void testGetMessageCollectionFromFolderWithMandatoryParameters() throws IOException, JSONException {
 		esbRequestHeadersMap.put("Action", "urn:getMessageCollectionFromFolder");
 
-		RestResponse<JSONObject> esbRestResponse =
-				sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap,
-				                    "getMessageCollectionFromFolder_mandatory.json");
+		RestResponse<JSONObject> esbRestResponse = sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap,
+		                                                               "getMessageCollectionFromFolder_mandatory.json");
 
 		String apiEndPoint = connectorProperties.getProperty("apiUrl") + "/" +
 		                     connectorProperties.getProperty("apiVersion") + "/me/MailFolders/" +
 		                     connectorProperties.getProperty("folderId") + "/messages";
-		RestResponse<JSONObject> apiRestResponse =
-				sendJsonRestRequest(apiEndPoint, "GET", apiRequestHeadersMap);
+		RestResponse<JSONObject> apiRestResponse = sendJsonRestRequest(apiEndPoint, "GET", apiRequestHeadersMap);
 
 		Assert.assertEquals(esbRestResponse.getHttpStatusCode(), 200);
 		Assert.assertEquals(apiRestResponse.getHttpStatusCode(), 200);
-		Assert.assertEquals(esbRestResponse.getBody().toString(),
-		                    apiRestResponse.getBody().toString());
+		Assert.assertEquals(esbRestResponse.getBody().toString(), apiRestResponse.getBody().toString());
 	}
 
 	/**
 	 * Negative test case for getMessageCollectionFromFolder method with mandatory parameters.
 	 */
 	@Test(enabled = true, description = "outlookmail {getMessage} integration test with negative case.")
-	public void testGetMessageCollectionFromFolderWithNegativeCase()
-			throws IOException, JSONException {
+	public void testGetMessageCollectionFromFolderWithNegativeCase() throws IOException, JSONException {
 		esbRequestHeadersMap.put("Action", "urn:getMessage");
 
-		RestResponse<JSONObject> esbRestResponse =
-				sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap,
-				                    "getMessageCollectionFromFolder_negative.json");
+		RestResponse<JSONObject> esbRestResponse = sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap,
+		                                                               "getMessageCollectionFromFolder_negative.json");
 
 		Assert.assertEquals(esbRestResponse.getHttpStatusCode(), 401);
 	}
@@ -452,8 +409,7 @@ public class OutLookMailConnectorIntegrationTest extends ConnectorIntegrationTes
 		esbRequestHeadersMap.put("Action", "urn:deleteMessage");
 
 		RestResponse<JSONObject> esbRestResponse =
-				sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap,
-				                    "deleteMessage_mandatory.json");
+				sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap, "deleteMessage_mandatory.json");
 
 		Assert.assertEquals(esbRestResponse.getHttpStatusCode(), 204);
 	}
@@ -467,8 +423,7 @@ public class OutLookMailConnectorIntegrationTest extends ConnectorIntegrationTes
 		esbRequestHeadersMap.put("Action", "urn:deleteMessage");
 
 		RestResponse<JSONObject> esbRestResponse =
-				sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap,
-				                    "deleteMessage_negative.json");
+				sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap, "deleteMessage_negative.json");
 
 		Assert.assertEquals(esbRestResponse.getHttpStatusCode(), 401);
 	}
@@ -482,8 +437,7 @@ public class OutLookMailConnectorIntegrationTest extends ConnectorIntegrationTes
 		esbRequestHeadersMap.put("Action", "urn:forwardMessage");
 
 		RestResponse<JSONObject> esbRestResponse =
-				sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap,
-				                    "forwardMessage_mandatory.json");
+				sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap, "forwardMessage_mandatory.json");
 
 		Assert.assertEquals(esbRestResponse.getHttpStatusCode(), 202);
 	}
@@ -491,14 +445,12 @@ public class OutLookMailConnectorIntegrationTest extends ConnectorIntegrationTes
 	/**
 	 * Negative test case for forwardMessage method with mandatory parameters.
 	 */
-	@Test(enabled = true, description = "outlookmail {forwardMessage} integration test with negative " +
-	                                    "case.")
+	@Test(enabled = true, description = "outlookmail {forwardMessage} integration test with negative " + "case.")
 	public void testforwardMessageWithNegativeCase() throws IOException, JSONException {
 		esbRequestHeadersMap.put("Action", "urn:forwardMessage");
 
 		RestResponse<JSONObject> esbRestResponse =
-				sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap,
-				                    "forwardMessage_negative.json");
+				sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap, "forwardMessage_negative.json");
 
 		Assert.assertEquals(esbRestResponse.getHttpStatusCode(), 401);
 	}
@@ -512,8 +464,7 @@ public class OutLookMailConnectorIntegrationTest extends ConnectorIntegrationTes
 		esbRequestHeadersMap.put("Action", "urn:moveMessage");
 
 		RestResponse<JSONObject> esbRestResponse =
-				sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap,
-				                    "moveMessage_mandatory.json");
+				sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap, "moveMessage_mandatory.json");
 
 		Assert.assertEquals(esbRestResponse.getHttpStatusCode(), 201);
 	}
@@ -526,8 +477,7 @@ public class OutLookMailConnectorIntegrationTest extends ConnectorIntegrationTes
 		esbRequestHeadersMap.put("Action", "urn:moveMessage");
 
 		RestResponse<JSONObject> esbRestResponse =
-				sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap,
-				                    "moveMessage_negative.json");
+				sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap, "moveMessage_negative.json");
 
 		Assert.assertEquals(esbRestResponse.getHttpStatusCode(), 401);
 	}
@@ -541,14 +491,12 @@ public class OutLookMailConnectorIntegrationTest extends ConnectorIntegrationTes
 		esbRequestHeadersMap.put("Action", "urn:replyToAll");
 
 		RestResponse<JSONObject> esbRestResponse =
-				sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap,
-				                    "replyToAll_mandatory.json");
+				sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap, "replyToAll_mandatory.json");
 
 		String apiEndPoint = connectorProperties.getProperty("apiUrl") + "/" +
 		                     connectorProperties.getProperty("apiVersion") + "/me/messages/" +
 		                     connectorProperties.getProperty("messageId") + "/replyall";
-		RestResponse<JSONObject> apiRestResponse =
-				sendJsonRestRequest(apiEndPoint, "POST", apiRequestHeadersMap);
+		RestResponse<JSONObject> apiRestResponse = sendJsonRestRequest(apiEndPoint, "POST", apiRequestHeadersMap);
 
 		Assert.assertEquals(esbRestResponse.getHttpStatusCode(), 202);
 		Assert.assertEquals(apiRestResponse.getHttpStatusCode(), 202);
@@ -557,14 +505,12 @@ public class OutLookMailConnectorIntegrationTest extends ConnectorIntegrationTes
 	/**
 	 * Negative test case for replyToAll method with mandatory parameters.
 	 */
-	@Test(enabled = true, description = "outlookmail {moveMessage} integration test with negative " +
-	                                    "case.")
+	@Test(enabled = true, description = "outlookmail {moveMessage} integration test with negative " + "case.")
 	public void testReplyToAllWithNegativeCase() throws IOException, JSONException {
 		esbRequestHeadersMap.put("Action", "urn:replyToAll");
 
 		RestResponse<JSONObject> esbRestResponse =
-				sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap,
-				                    "replyToAll_negative.json");
+				sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap, "replyToAll_negative.json");
 
 		Assert.assertEquals(esbRestResponse.getHttpStatusCode(), 401);
 	}
@@ -578,14 +524,12 @@ public class OutLookMailConnectorIntegrationTest extends ConnectorIntegrationTes
 		esbRequestHeadersMap.put("Action", "urn:replyToSender");
 
 		RestResponse<JSONObject> esbRestResponse =
-				sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap,
-				                    "replyToSender_mandatory.json");
+				sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap, "replyToSender_mandatory.json");
 
 		String apiEndPoint = connectorProperties.getProperty("apiUrl") + "/" +
 		                     connectorProperties.getProperty("apiVersion") + "/me/messages/" +
 		                     connectorProperties.getProperty("messageId") + "/reply";
-		RestResponse<JSONObject> apiRestResponse =
-				sendJsonRestRequest(apiEndPoint, "POST", apiRequestHeadersMap);
+		RestResponse<JSONObject> apiRestResponse = sendJsonRestRequest(apiEndPoint, "POST", apiRequestHeadersMap);
 
 		Assert.assertEquals(esbRestResponse.getHttpStatusCode(), 202);
 		Assert.assertEquals(apiRestResponse.getHttpStatusCode(), 202);
@@ -600,8 +544,7 @@ public class OutLookMailConnectorIntegrationTest extends ConnectorIntegrationTes
 		esbRequestHeadersMap.put("Action", "urn:replyToSender");
 
 		RestResponse<JSONObject> esbRestResponse =
-				sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap,
-				                    "replyToSender_negative.json");
+				sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap, "replyToSender_negative.json");
 
 		Assert.assertEquals(esbRestResponse.getHttpStatusCode(), 401);
 	}
@@ -609,14 +552,12 @@ public class OutLookMailConnectorIntegrationTest extends ConnectorIntegrationTes
 	/**
 	 * Positive test case for sendMail method with mandatory parameters.
 	 */
-	@Test(enabled = true, description = "outlookmail {sendMail} integration test with mandatory" +
-	                                    " parameters.")
+	@Test(enabled = true, description = "outlookmail {sendMail} integration test with mandatory" + " parameters.")
 	public void testSendMailWithMandatoryParameters() throws IOException, JSONException {
 		esbRequestHeadersMap.put("Action", "urn:sendMail");
 
 		RestResponse<JSONObject> esbRestResponse =
-				sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap,
-				                    "sendMail_mandatory.json");
+				sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap, "sendMail_mandatory.json");
 
 		Assert.assertEquals(esbRestResponse.getHttpStatusCode(), 202);
 	}
@@ -629,8 +570,7 @@ public class OutLookMailConnectorIntegrationTest extends ConnectorIntegrationTes
 		esbRequestHeadersMap.put("Action", "urn:sendMail");
 
 		RestResponse<JSONObject> esbRestResponse =
-				sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap,
-				                    "sendMail_negative.json");
+				sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap, "sendMail_negative.json");
 
 		Assert.assertEquals(esbRestResponse.getHttpStatusCode(), 401);
 	}
